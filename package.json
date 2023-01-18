@@ -1,0 +1,31 @@
+{
+  "name": "async-image-processing",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "yarn nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/William-K-Azevedo/async-image-processing.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/William-K-Azevedo/async-image-processing/issues"
+  },
+  "homepage": "https://github.com/William-K-Azevedo/async-image-processing#readme",
+  "dependencies": {
+    "@bull-board/express": "^4.10.2",
+    "bullmq": "^3.5.7",
+    "ejs": "^3.1.8",
+    "express": "^4.18.2",
+    "express-fileupload": "^1.4.0",
+    "nodemon": "^2.0.20",
+    "sharp": "^0.31.3"
+  }
+}
