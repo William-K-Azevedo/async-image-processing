@@ -1,9 +1,24 @@
 import express from "express";
 import fs from "fs";
 import path from "path";
-import sharp from "sharp";
 import fileupload from "express-fileupload";
 import bodyParser from "body-parser";
+import { fileURLToPath } from "url";
+const { Queue } = require("bullmq");
+
+const redisOptions = { host: "127.0.0.1", port: 6378 };
+
+const imageJobQueue = new Queue("imageJobQueue", {
+  connection: redisOptions,
+});
+
+async function addJob(job) {
+  await imageJobQueue.add(job.type, job);
+}
+
+const __filename = fileURLToPath(import.meta.url);
+
+const __dirname = path.dirname(__filename);
 
 const app = express();
 
@@ -34,20 +49,13 @@ app.post("/upload", async function (req, res) {
 
   if (!image) return res.sendStatus(400);
 
-  const imageName = path.parse(image.name).name;
-  const processImage = (size) =>
-    sharp(image.data)
-      .resize(size, size)
-      .webp({ lossless: true })
-      .toFile(`./public/images/${imageName}-${size}.webp`);
-
-  sizes = [90, 96, 120, 144, 160, 180, 240, 288, 360, 480, 720, 1440];
-  Promise.all(sizes.map(processImage));
-
-  let counter = 0;
-  for (let i = 0; i < 10_000_000_000; i++) {
-    counter++;
-  }
+  await addJob({
+    type: "processUploadedImages",
+    image: {
+      data: image.data.toString("base64"),
+      name: image.name,
+    },
+  });
 
   res.redirect("/result");
 });
