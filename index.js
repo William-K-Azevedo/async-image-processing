@@ -4,9 +4,9 @@ import path from "path";
 import fileupload from "express-fileupload";
 import bodyParser from "body-parser";
 import { fileURLToPath } from "url";
-const { Queue } = require("bullmq");
+import { Queue } from "bullmq";
 
-const redisOptions = { host: "127.0.0.1", port: 6378 };
+const redisOptions = { host: "127.0.0.1", port: 6379 };
 
 const imageJobQueue = new Queue("imageJobQueue", {
   connection: redisOptions,
